@@ -54,7 +54,7 @@ When you follow the steps above your application will use the already deployed b
 | Name             | Address                                          | Explainer                           |
 |------------------|--------------------------------------------------|-------------------------------------|
 | BACKEND          | https://aa-hc-text2call.onrender.com/hc       |                                     |
-| FRONTEND         | https://aa-hc-example-fe.onrender.com     |                                     |
+| FRONTEND         | https://aa-hc-text2call-zbk5.onrender.com   |                                     |
 | HC_HELPER_ADDR   | 0x1c64EC0A5E2C58295c3208a63209A2A719dF68D8       | HC Helper is system-wide available  |
 | TOKEN_PRICE_ADDR | 0xcad49c0381c1B0779A318c2326Db43A6073adC1e | 
 | RPC_URL          | https://gateway.tenderly.co/public/boba-sepolia	 |                                     |
