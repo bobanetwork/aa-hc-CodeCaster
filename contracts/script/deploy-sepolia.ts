@@ -71,12 +71,12 @@ async function main() {
         console.log('RPC_URL = ', RPC_URL)
         console.log('-------------------')
 
-        const finalBackendUrl = BACKEND_URL ?? "https://aa-hc-example.onrender.com/hc"
+        const finalBackendUrl = BACKEND_URL ?? "https://aa-hc-text2call.onrender.com/hc"
         updateEnvVariable("BACKEND_URL", finalBackendUrl)
         updateEnvVariable("ENTRY_POINT", ENTRYPOINT_ADDR)
 
         if (!BACKEND_URL) {
-            console.warn('BACKEND_URL not defined. Using default public endpoint https://aa-hc-example.onrender.com/hc')
+            console.warn('BACKEND_URL not defined. Using default public endpoint https://aa-hc-text2call.onrender.com/hc')
         }
         if (!HC_HELPER_ADDR || !hybridAccountAddress || !tokenPriceAddress || !PRIVATE_KEY || !RPC_URL) {
             throw Error("Configuration missing")
