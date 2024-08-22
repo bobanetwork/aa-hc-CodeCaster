@@ -1,11 +1,17 @@
 import { ethers } from "hardhat";
-import { TokenPrice, TokenPrice__factory, HybridAccount, HybridAccount__factory } from "../typechain-types";
+import {
+    TokenPrice,
+    TokenPrice__factory,
+    HybridAccount,
+    HybridAccount__factory,
+    SimpleContract__factory
+} from "../typechain-types";
 import {Wallet, JsonRpcProvider, concat, hexlify, FunctionFragment, AbiCoder} from "ethers";
 import axios from "axios";
 
-const {BUNDLER_RPC, TOKEN_PRICE_ADDRESS, HYBRID_ACCOUNT_ADDRESS, ENTRY_POINT} = process.env
-if (!BUNDLER_RPC || !TOKEN_PRICE_ADDRESS || !HYBRID_ACCOUNT_ADDRESS || !ENTRY_POINT) {
-    throw new Error(`[setup.ts] Environment variables not properly setup! ${BUNDLER_RPC}, ${TOKEN_PRICE_ADDRESS}, ${HYBRID_ACCOUNT_ADDRESS}`)
+const {BUNDLER_RPC, SIMPLE_CONTRACT_ADDR, HYBRID_ACCOUNT, ENTRY_POINT} = process.env
+if (!BUNDLER_RPC || !SIMPLE_CONTRACT_ADDR || !HYBRID_ACCOUNT || !ENTRY_POINT) {
+    throw new Error(`[setup.ts] Environment variables not properly setup! ${BUNDLER_RPC}, ${SIMPLE_CONTRACT_ADDR}, ${HYBRID_ACCOUNT}`)
 }
 
 export async function setupTests() {
@@ -13,11 +19,11 @@ export async function setupTests() {
     const provider = owner.provider as JsonRpcProvider;
 
     // Create contract instances
-    const tokenPriceContract = TokenPrice__factory.connect(TOKEN_PRICE_ADDRESS!, owner);
-    const hybridAccountContract = HybridAccount__factory.connect(HYBRID_ACCOUNT_ADDRESS!, owner);
+    const simpleContract = SimpleContract__factory.connect(SIMPLE_CONTRACT_ADDR!, owner);
+    const hybridAccountContract = HybridAccount__factory.connect(HYBRID_ACCOUNT!, owner);
 
     return {
-        tokenPriceContract,
+        simpleContract,
         hybridAccountContract,
         owner,
         user,
@@ -169,19 +175,13 @@ const abiCoder = new AbiCoder();
 export async function sendUserOperation(
     chainId: string,
     bundlerRpc: string,
-    tokenPriceContract: TokenPrice,
     user: Wallet,
     method: string,
-    params: any[]
 ) {
-    if (!params.length) {
-        throw new Error('[sendUserOperation:setup.ts] No token symbol provided!');
-    }
-    const tokenSymbol: string = params[0];
-    const funcSelector = FunctionFragment.getSelector("fetchPrice", ["string"]);
+    const funcSelector = FunctionFragment.getSelector(method, []);
 
     // Encode the tokenSymbol as a string
-    const encodedParams = abiCoder.encode(["string"], [tokenSymbol]);
+    const encodedParams = abiCoder.encode([], []);
 
     // Concatenate function selector and encoded params
     const callData = hexlify(concat([funcSelector, encodedParams]));

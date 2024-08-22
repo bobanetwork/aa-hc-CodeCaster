@@ -10,14 +10,14 @@ interface ITranslator {
 contract SimpleContract {
     string public winningNumber;
 
-    address translator;
+    address public translator;
 
     struct Player {
         string pickedNumber;
         address playerAddr;
     }
 
-    mapping (address => Player) playerMap;
+    mapping (address => Player) public playerMap;
 
     constructor(address _translator) {
         translator = _translator;

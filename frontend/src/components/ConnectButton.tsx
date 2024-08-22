@@ -1,4 +1,4 @@
-import { MetamaskState } from "@/context/MetamaskContext";
+import { MetamaskState } from "@/hooks/MetamaskContext";
 import { Button } from "./ui/button";
 import MMFlaskFox from "@/assets/flask_fox.svg";
 import truncateEthAddress from 'truncate-eth-address';

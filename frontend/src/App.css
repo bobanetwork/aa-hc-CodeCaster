@@ -40,3 +40,10 @@
 .read-the-docs {
   color: #888;
 }
+
+
+.header {
+  position:fixed;
+  z-index:99;
+  width:100%;
+}
