@@ -19,7 +19,6 @@ import { hexlify, ethers } from "ethers";
 import { ADD_SUB_CONTRACT } from "@/config/snap";
 
 import { AbiCoder } from "ethers";
-import { Buffer } from "buffer";
 
 const defaultMessage = [
   <>
@@ -58,7 +57,9 @@ export const ChatBox = () => {
         return;
       }
 
-      const txData = hexlify(Buffer.from(inputMessage, "utf8"));
+      const funcSelector = FunctionFragment.getSelector("do_it", ["string"]);
+      const encodedParams = abiCoder.encode(["string"], [inputMessage]);
+      const txData = hexlify(concat([funcSelector, encodedParams]));
 
       const transactionDetails = {
         payload: {
