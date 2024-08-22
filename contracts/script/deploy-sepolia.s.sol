@@ -6,7 +6,8 @@ import "../contracts/samples/HybridAccount.sol";
 import "../contracts/samples/TokenPaymaster.sol";
 import "../contracts/core/HCHelper.sol";
 import "../contracts/samples/HybridAccountFactory.sol";
-import "../contracts/TokenPrice.sol";
+import "../contracts/SimpleContract.sol";
+import {Translator} from "../contracts/Translator.sol";
 
 contract DeployExample is Script {
     // Configs
@@ -22,7 +23,7 @@ contract DeployExample is Script {
     // Contracts
     HybridAccount public hybridAccount;
     HCHelper public hcHelper;
-    TokenPrice public tokenPrice;
+    SimpleContract public simpleContract;
     TokenPaymaster public tokenPaymaster;
 
     function run() public {
@@ -47,12 +48,13 @@ contract DeployExample is Script {
         console.log(address(hybridAccount));
 
         // deploy your own contract
-        tokenPrice = new TokenPrice(address(hybridAccount));
+        Translator translator = new Translator(payable(hybridAccount));
+        simpleContract = new SimpleContract(address(translator));
 
         // register url, add credit
         // only owner - reach out to Boba foundation: hcHelper.RegisterUrl(address(hybridAccount), backendURL);
         hcHelper.AddCredit(address(hybridAccount), 100);
-        hybridAccount.PermitCaller(address(tokenPrice), true);
+        hybridAccount.PermitCaller(address(simpleContract), true);
         // permit caller
         hybridAccount.initialize(deployerAddress);
         vm.stopBroadcast();
