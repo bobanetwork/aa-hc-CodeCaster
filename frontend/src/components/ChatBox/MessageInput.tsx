@@ -19,6 +19,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
 
   return (
     <input
+      data-testid="ai-input"
       type="text"
       className="message-input"
       placeholder="Type message..."

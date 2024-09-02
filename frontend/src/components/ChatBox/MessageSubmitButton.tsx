@@ -8,7 +8,7 @@ const MessageSubmitButton: React.FC<MessageSubmitButtonProps> = ({
   handleSendMessage,
 }) => {
   return (
-    <button className="message-submit" onClick={handleSendMessage}>
+    <button data-testid="submit-message" className="message-submit" onClick={handleSendMessage}>
       Send
     </button>
   );

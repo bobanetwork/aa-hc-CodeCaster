@@ -12,6 +12,7 @@ const InstallMetaMaskButton = ({ ...props }) => {
 const ConnectButton = ({ ...props }) => {
   return <Button
     {...props}
+    data-testid='connect'
     variant="destructive"
     className="py-2 px-7 mx-4 rounded-2xl">
     <img src={MMFlaskFox} alt="mm fox" className="mr-2" />
