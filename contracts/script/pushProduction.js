@@ -6,18 +6,18 @@ const RPC_URL = args[0];
 const PRIVATE_KEY = args[1];
 const HC_HELPER_ADDR = args[2];
 const HYBRID_ACCOUNT = args[3];
-const TOKEN_PRICE_ACCOUNT_ADDR = args[4];
+const CUSTOM_CONTRACT = args[4];
 const BACKEND_URL = args[5] ?? 'https://aa-hc-text2call.onrender.com/hc'; // use public backend by default
 
 console.log('HCH = ', HC_HELPER_ADDR)
 console.log('HA = ', HYBRID_ACCOUNT);
-console.log('TTP = ', TOKEN_PRICE_ACCOUNT_ADDR);
+console.log('TTP = ', CUSTOM_CONTRACT);
 console.log('BE = ', BACKEND_URL)
 console.log('RPC_URL = ', RPC_URL)
 
 const signer = new ethers.Wallet(PRIVATE_KEY, new ethers.JsonRpcProvider(RPC_URL));
 
-if (!HC_HELPER_ADDR || !HYBRID_ACCOUNT || !TOKEN_PRICE_ACCOUNT_ADDR || !BACKEND_URL) {
+if (!HC_HELPER_ADDR || !HYBRID_ACCOUNT || !CUSTOM_CONTRACT || !BACKEND_URL) {
     throw Error("Configuration missing")
 }
 
@@ -107,7 +107,7 @@ async function main() {
 
     try {
         console.log('Registering permitCaller...')
-        await permitCaller(TOKEN_PRICE_ACCOUNT_ADDR);
+        await permitCaller(CUSTOM_CONTRACT);
         console.log('DONE')
     } catch (e) {
         console.log('[Ignore on testnet] failed permitCaller: ', e);

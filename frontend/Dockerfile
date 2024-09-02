@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM node:20-alpine AS build
+FROM --platform=linux/arm64 node:20-alpine AS build
 
 ARG NETWORK
 

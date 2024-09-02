@@ -17,4 +17,4 @@ COPY *.py .
 EXPOSE ${OC_LISTEN_PORT:-1234}
 
 # Run the application when the container launches
-CMD ["python", "offchain.py"]
+CMD ["python", "-u",  "offchain.py"]

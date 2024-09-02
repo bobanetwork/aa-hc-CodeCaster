@@ -1,6 +1,10 @@
 from web3 import Web3
 from jsonrpclib.SimpleJSONRPCServer import SimpleJSONRPCServer, SimpleJSONRPCRequestHandler
 from text2call import offchain_text2multi
+import logging
+
+# Initialize logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def selector(name):
     nameHash = Web3.to_hex(Web3.keccak(text=name))

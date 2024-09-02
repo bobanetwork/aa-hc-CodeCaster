@@ -24,6 +24,7 @@ contract DeployExample is Script {
     HybridAccount public hybridAccount;
     VerifyingPaymaster public verifyingPaymaster;
     TokenPaymaster public tokenPaymaster;
+    Translator public translator;
     SimpleContract public simpleContract;
     SimpleAccount public simpleAccount;
     SimpleAccountFactory public saf;
@@ -59,9 +60,9 @@ contract DeployExample is Script {
         // use block number to always deploy fresh HA & SA
         hybridAccount = haf.createAccount(deployerAddress, block.number);
 
-        Translator translator = new Translator(payable(hybridAccount));
+        translator = new Translator(payable(hybridAccount));
         simpleContract = new SimpleContract(address(translator));
-        hybridAccount.PermitCaller(address(simpleContract), true);
+        hybridAccount.PermitCaller(address(translator), true);
 
         verifyingPaymaster = new VerifyingPaymaster(entrypoint, address(deployerAddress));
         tokenPaymaster = new TokenPaymaster(address(haf), "sym", IEntryPoint(entrypoint));

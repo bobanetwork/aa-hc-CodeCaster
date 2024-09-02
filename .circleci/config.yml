@@ -101,7 +101,7 @@ jobs:
             cd ./contracts
             npx hardhat test
           environment:
-            TOKEN_PRICE_CONTRACT: ${TOKEN_PRICE_CONTRACT}
+            CUSTOM_CONTRACT: ${CUSTOM_CONTRACT}
             RPC_URL: ${RPC_URL}
             PRIVATE_KEY: ${PRIVATE_KEY}
       - run:

@@ -32,6 +32,8 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
+    environment:
+      - PYTHONUNBUFFERED=1  # Add this line to disable bufferin
 
   frontend:
     build:
@@ -41,7 +43,7 @@ services:
         - NETWORK=local
     image: bobanetwork/aa-hc-example-frontend
     volumes:
-      - ./frontend/.env-local:/app/frontend/.env-local
+      - ./frontend/.env:/app/frontend/.env
     ports:
       - "8000:80"
     restart: unless-stopped
@@ -60,7 +62,7 @@ services:
       - ./snap-account-abstraction-keyring/packages/site/.env:/app/snap-account-abstraction-keyring/packages/site/.env
       - ./snap-account-abstraction-keyring/packages/site/.env.development:/app/snap-account-abstraction-keyring/packages/site/.env.development
       - ./snap-account-abstraction-keyring/packages/site/.env.development.hc:/app/snap-account-abstraction-keyring/packages/site/.env.development.hc
-      - ./snap-account-abstraction-keyring/packages/snap/.env-local:/app/snap-account-abstraction-keyring/packages/snap/.env-local
+      - ./snap-account-abstraction-keyring/packages/snap/.env:/app/snap-account-abstraction-keyring/packages/snap/.env
     restart: unless-stopped
 
 networks:

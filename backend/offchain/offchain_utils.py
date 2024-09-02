@@ -20,7 +20,7 @@ HA_ADDR = os.environ['OC_HYBRID_ACCOUNT']
 assert (len(HA_ADDR) == 42)
 HybridAcctAddr = Web3.to_checksum_address(HA_ADDR)
 
-HA_OWNER = os.environ['OC_OWNER']
+HA_OWNER = os.environ['OC_HYBRID_ACCOUNT']
 assert (len(HA_OWNER) == 42)
 hc1_addr = Web3.to_checksum_address(HA_OWNER)
 

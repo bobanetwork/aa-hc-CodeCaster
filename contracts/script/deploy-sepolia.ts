@@ -48,8 +48,8 @@ async function main() {
         console.log(`Updated HYBRID_ACCOUNT in .env: ${hybridAccountAddress}`);
 
         // Update TOKEN_PRICE_ADDR in .env
-        updateEnvVariable("TOKEN_PRICE_CONTRACT", tokenPriceAddress);
-        console.log(`Updated TOKEN_PRICE_CONTRACT in .env: ${tokenPriceAddress}`);
+        updateEnvVariable("CUSTOM_CONTRACT", tokenPriceAddress);
+        console.log(`Updated CUSTOM_CONTRACT in .env: ${tokenPriceAddress}`);
 
         await new Promise((resolve) => setTimeout(resolve, 3000));
 

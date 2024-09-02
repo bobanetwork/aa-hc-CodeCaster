@@ -46,11 +46,11 @@ export const connectSnap = async (
 ) => {
   // check for current connected chain and force user to switch to boba sepolia.
   const currentChain = window.ethereum.networkVersion;
-  if (currentChain !== '28882') {
+  if (currentChain !== '901') {
     await window.ethereum.request({
       method: 'wallet_switchEthereumChain',
       params: [{
-        chainId: '0x70d2'
+        chainId: '0x385'
       }]
     })
   }

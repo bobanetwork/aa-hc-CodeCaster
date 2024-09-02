@@ -24,7 +24,7 @@ const ha1Owner = ethers.getAddress("0xE073fC0ff8122389F6e693DD94CcDc5AF637448e")
 
 
 /** @DEV Configurations */
-const snapEnv = '../snap-account-abstraction-keyring/packages/snap/.env-local'
+const snapEnv = '../snap-account-abstraction-keyring/packages/snap/.env'
 const rootPath = '../.env'
 const frontendEnvPath = path.resolve(__dirname, "../../frontend/.env-local");
 const backendEnvPath = path.resolve(__dirname, "../../backend/.env");
@@ -92,7 +92,7 @@ async function main() {
         const hcHelperAddr = getContractFromDeployAddresses(contracts, "HCHelper");
         const haFactory = getContractFromDeployAddresses(contracts, "HybridAccountFactory");
         const saFactory = getContractFromDeployAddresses(contracts, "SimpleAccountFactory");
-        const tokenPriceAddress = getContractFromDeployAddresses(contracts, "TokenPrice");
+        const translator = getContractFromDeployAddresses(contracts, "Translator");
         const tokenPaymasterAddress = getContractFromDeployAddresses(contracts, "TokenPaymaster");
         const verifyingPaymasterContract = getContractFromDeployAddresses(contracts, "VerifyingPaymaster");
         const entrypoint = getContractFromDeployAddresses(contracts, "EntryPoint");
@@ -102,37 +102,15 @@ async function main() {
                     HCHelper: ${hcHelperAddr}
                     HybridAccountFactory: ${haFactory}
                     SimpleAccountFactory: ${saFactory}
-                    TokenPrice: ${tokenPriceAddress}
+                    Translator: ${translator}
                     TokenPaymaster: ${tokenPaymasterAddress}
                     VerifyingPaymaster: ${verifyingPaymasterContract}
                     EntryPoint: ${entrypoint}
                     HybridAccount: ${hybridAccountAddr}
         `);
 
-        if (!hcHelperAddr || !hybridAccountAddr || !haFactory || !tokenPriceAddress || !tokenPaymasterAddress || !verifyingPaymasterContract || !saFactory || !entrypoint) {
+        if (!hcHelperAddr || !hybridAccountAddr || !haFactory || !translator || !tokenPaymasterAddress || !verifyingPaymasterContract || !saFactory || !entrypoint) {
             throw Error("Some contracts are not defined!");
-        }
-
-        // /** @DEV Build Rundler with passed envs */
-        // await execPromise("docker compose up -d --build rundler-hc --build", [],
-        //     path.resolve(__dirname, "../../rundler-hc/hybrid-compute/"), {...process.env, ...{
-        //             HC_HELPER_ADDR: hcHelperAddr,
-        //             HC_SYS_ACCOUNT: hybridAccountAddr,
-        //             HC_SYS_OWNER: ha0Owner,
-        //             HC_SYS_PRIVKEY: ha0Privkey,
-        //             ENTRY_POINTS: entrypoint,
-        //             BUILDER_PRIVKEY: builderPrivkey,
-        //             NODE_HTTP: `http://${getLocalIpAddress()}:9545`,
-        //             CHAIN_ID: "901",
-        //         }}
-        // );
-
-        if (isCi) {
-            await execPromise(`find ${path.resolve(__dirname, "../../rundler-hc")} -name \"node_modules\" -type d -prune -exec rm -rf {} +`, []);
-            console.log("Deleted node_modules within rundler repo.")
-
-            await execPromise("sudo apt remove rustc cargo && sudo apt autoremove", []);
-            console.log("Deleted Rust and Cargo as not needed anymore.")
         }
 
         /** @DEV Rundler Environment */
@@ -150,7 +128,7 @@ async function main() {
         updateEnvVariable("BUNDLER_RPC", "http://localhost:3300", rootPath);
 
         /** @DEV Frontend Environment */
-        updateEnvVariable("VITE_SMART_CONTRACT", tokenPriceAddress, frontendEnvPath);
+        updateEnvVariable("VITE_SMART_CONTRACT", translator, frontendEnvPath);
         updateEnvVariable("VITE_RPC_PROVIDER", "http://localhost:9545", frontendEnvPath);
         updateEnvVariable("VITE_SNAP_ORIGIN", "local:http://localhost:8080", frontendEnvPath);
         updateEnvVariable("VITE_SNAP_VERSION", DEFAULT_SNAP_VERSION, frontendEnvPath);
@@ -166,7 +144,7 @@ async function main() {
         /** @DEV Contracts Environment */
         updateEnvVariable("HYBRID_ACCOUNT", hybridAccountAddr, contractsEnvPath);
         updateEnvVariable("ENTRY_POINT", entrypoint, contractsEnvPath);
-        updateEnvVariable("TOKEN_PRICE_CONTRACT", tokenPriceAddress, contractsEnvPath);
+        updateEnvVariable("CUSTOM_CONTRACT", translator, contractsEnvPath);
         updateEnvVariable("HC_HELPER_ADDR", hcHelperAddr, contractsEnvPath);
         updateEnvVariable("PRIVATE_KEY", deployKey, contractsEnvPath);
         updateEnvVariable("BACKEND_URL", `http://${getLocalIpAddress()}:1234/hc`, contractsEnvPath);
@@ -181,13 +159,6 @@ async function main() {
         updateEnvVariable("LOCAL_SIMPLE_ACCOUNT_FACTORY", saFactory, snapEnv);
         updateEnvVariable("VERIFYING_PAYMASTER_ADDRESS", verifyingPaymasterContract, snapEnv);
         updateEnvVariable("LOCAL_BOBAPAYMASTER", tokenPaymasterAddress, snapEnv);
-
-        /** @DEV bootstrap frontend, backend and snap */
-        await execPromise(
-            "docker-compose -f docker-compose.local.yml up -d --build",
-            [],
-            path.resolve(__dirname, "../../")
-        );
     } catch (error) {
         console.error(error);
     }
@@ -201,7 +172,7 @@ const updateEnvVariable = (key: string, value: string, envPath: string) => {
         envFile = fs.readFileSync(envPath, "utf8");
     } catch (err: any) {
         if (err?.code! === 'ENOENT') {
-            // File doesn't exist, create it
+            console.log(`Creating .env file for ${envPath}`)
             envFile = '';
         } else {
             throw err;

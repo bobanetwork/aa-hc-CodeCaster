@@ -3,6 +3,10 @@ from eth_abi import abi as ethabi
 from offchain_utils import gen_response, parse_req, API_KEY
 import re
 from openai import OpenAI
+import logging
+
+# Initialize logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 client = OpenAI(api_key=API_KEY)
 

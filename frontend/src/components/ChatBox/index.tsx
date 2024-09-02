@@ -53,7 +53,8 @@ export const ChatBox = () => {
 
   const handleSubmit = async (ethValue: string | undefined) => {
     try {
-      if (!state.selectedAcount || state.chain !== "28882" || !validPrompt) {
+      if (!state.selectedAcount || !validPrompt) {
+        console.log('Not connected')
         return;
       }
 
@@ -100,7 +101,8 @@ export const ChatBox = () => {
   const handdleApprove = async () => {
     if (!state) return;
     try {
-      if (!selectedAcount || Number(state.chain) !== 28882 || validPrompt) {
+      console.log('no acc: ');
+      if (!selectedAcount) {
         return;
       }
 
@@ -201,6 +203,7 @@ export const ChatBox = () => {
     setMessages((prevMessages) => [...prevMessages, inputMessage]);
     setInputMessage("");
     scrollToBottom();
+    console.log('done')
   };
 
   const scrollToBottom = () => {
