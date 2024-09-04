@@ -63,9 +63,6 @@ When you follow the steps above your application will use the already deployed b
 
 This is what a successful transaction will look like: [0x30056b3ff720f4d824422bd077b88c4333e86fbe5522bcdba96cfc8fa2a69b52](https://testnet.bobascan.com/tx/0x30056b3ff720f4d824422bd077b88c4333e86fbe5522bcdba96cfc8fa2a69b52?chainid=28882)
 
-This is what it will look like on the frontend provided:
-![Successful userOp](./assets/successful_userop.png "Successful userOp")
-
 # How does it work?
 This example utilizes [Hybrid Compute 2.0](https://docs.boba.network/developer/features/aa-basics/hybrid-compute) based on [Account Abstraction](https://docs.boba.network/developer/features/aa-basics#what-is-account-abstraction).
 
