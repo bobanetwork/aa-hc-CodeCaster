@@ -1,14 +1,18 @@
 from web3 import Web3
 from eth_abi import abi as ethabi
-from offchain_utils import gen_response, parse_req, API_KEY
 import re
+import os
 from openai import OpenAI
 import logging
+from hybrid_compute_sdk import HybridComputeSDK
 
-# Initialize logging
+API_KEY = os.environ['OPENAI_APIKEY']
+assert (len(API_KEY) > 1)
+
+# Initialize logging, client and sdk
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
 client = OpenAI(api_key=API_KEY)
+sdk = HybridComputeSDK()
 
 def response_simple_transfer(target, amount):
     # Target is expected to be a valid address including checksum
@@ -67,7 +71,7 @@ def offchain_text2multi(ver, sk, src_addr, src_nonce, oo_nonce, payload, *args):
     req = None
 
     try:
-        req = parse_req(sk, src_addr, src_nonce, oo_nonce, payload)
+        req = sdk.parse_req(sk, src_addr, src_nonce, oo_nonce, payload)
         dec = ethabi.decode(['string'], req['reqBytes'])
 
         condition_text = ""
@@ -143,4 +147,4 @@ def offchain_text2multi(ver, sk, src_addr, src_nonce, oo_nonce, payload, *args):
     except Exception as e:
         print("DECODE FAILED", e)
 
-    return gen_response(req, err_code, resp)
+    return sdk.gen_response(req, err_code, resp)
