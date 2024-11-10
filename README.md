@@ -1,8 +1,6 @@
 # What is this?
 This is a (hopefully) easy to use example of how you can use [Hybrid Compute](https://docs.boba.network/developer/features/aa-basics/hybrid-compute) with [Account Abstraction](https://docs.boba.network/developer/features/aa-basics) to build powerful Web3 Apps!
 
-This "Text2Call" example allows you to craft transactions from written text via a LLM such as ChatGPT! 
-
 You can run this repo in 2 ways: 
 - On our official testnet "Boba Sepolia"
 - or spin up the local stack end-to-end (including the local chain, the bundler for Account Abstraction, the snap, etc.)
