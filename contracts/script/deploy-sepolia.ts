@@ -36,7 +36,7 @@ async function main() {
         const hybridAccountAddress = readHybridAccountAddress(latestBroadcast);
         const contracts = parseDeployAddresses(latestBroadcast)
 
-        const tokenPriceAddress = getContractFromDeployAddresses(contracts, "TokenPrice")
+        const tokenPriceAddress = getContractFromDeployAddresses(contracts, "Translator")
 
         console.log("Verifying HybridAccount contract...");
         await execPromise(
