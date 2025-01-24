@@ -1,4 +1,4 @@
-import "./samples/HybridAccount.sol";
+import "./HybridAccount.sol";
 
 // User Account approves this contract for using commands that include erc20 tokens
 contract Translator {

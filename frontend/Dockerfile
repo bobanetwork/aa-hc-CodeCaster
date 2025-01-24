@@ -16,7 +16,7 @@ RUN npm i
 COPY . .
 
 # Copy the correct .env file based on the NETWORK argument
-COPY .env-${NETWORK} .env
+COPY .env-boba-sepolia .env
 # VITE needs env-vars at build time
 
 # Build the application
