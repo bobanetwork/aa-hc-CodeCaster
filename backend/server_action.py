@@ -2,16 +2,21 @@ from web3 import Web3
 from eth_abi import abi as ethabi
 import re
 import os
-from openai import OpenAI
+import openai
 import logging
 from hybrid_compute_sdk import HybridComputeSDK
+from dotenv import load_dotenv
 
-API_KEY = os.environ['OPENAI_APIKEY']
+# Load environment variables
+load_dotenv()
+API_KEY = os.environ.get('OPENAI_APIKEY')
 assert (len(API_KEY) > 1)
 
-# Initialize logging, client and sdk
+# Initialize OpenAI
+openai.api_key = API_KEY
+
+# Initialize logging and sdk
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-client = OpenAI(api_key=API_KEY)
 sdk = HybridComputeSDK()
 
 def response_simple_transfer(target, amount):
