@@ -20,7 +20,7 @@ const NetworkAlert = () => {
     )
   }
 
-  if (Number(state.chain) !== 28882 || Number(state.chain) !== 901) {
+  if (Number(state.chain) !== 28882 && Number(state.chain) !== 901) {
     return (
       <div className="flex w-6/12 rounded-md shadow-sm border m-auto my-2 p-5 items-center justify-start gap-2 bg-yellow-600 margin-auto">
         <AlertTriangle color="#fff" />
