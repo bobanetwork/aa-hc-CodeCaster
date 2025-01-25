@@ -62,6 +62,8 @@ export const ChatBox = () => {
       const encodedParams = abiCoder.encode(["string"], [inputMessage]);
       const txData = hexlify(concat([funcSelector, encodedParams]));
 
+      console.log('using contract: ', ADD_SUB_CONTRACT)
+
       const transactionDetails = {
         payload: {
           to: ADD_SUB_CONTRACT,

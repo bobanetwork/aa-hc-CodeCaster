@@ -11,6 +11,7 @@ def offchain_hello(ver, sk, src_addr, src_nonce, oo_nonce, payload, *args):
     return { "success":True, "response":payload, "signature":"0x" }
 
 def server_loop():
+    print("Booting")
     # new sdk instance
     sdk = HybridComputeSDK()
     # prepare the server
@@ -20,6 +21,7 @@ def server_loop():
     # add another server action
     sdk.add_server_action("hello", offchain_hello)
     # start server
+    print("Actions added, serving")
     sdk.serve_forever()
 
 server_loop()
