@@ -50,7 +50,7 @@ export const connectSnap = async (
     await window.ethereum.request({
       method: 'wallet_switchEthereumChain',
       params: [{
-        chainId: '0x385'
+        chainId: '0x70D2'
       }]
     })
   }

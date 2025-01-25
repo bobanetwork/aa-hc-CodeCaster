@@ -10,7 +10,8 @@ import "@account-abstraction/contracts/samples/SimpleAccountFactory.sol";
 import "@account-abstraction/contracts/samples/TokenPaymaster.sol";
 import "@account-abstraction/contracts/samples/VerifyingPaymaster.sol";
 import "@account-abstraction/contracts/samples/VerifyingPaymaster.sol";
-import "../contracts/PresiSimToken.sol";
+import "../contracts/SimpleContract.sol";
+import "../contracts/Translator.sol";
 
 contract DeployExample is Script {
     // Configs
@@ -37,38 +38,42 @@ contract DeployExample is Script {
 
         // Deploy using HybridAccountFactory, salt = block.number to force redeploy HybridAccount if already existing from this wallet
         hybridAccount = HybridAccountFactory(haFactory).createAccount(deployerAddress, block.number);
-        console.log("Account created");
+        console.log("Hybrid Account created");
         console.log(address(hybridAccount));
 
         // Fund the account if needed
         if (address(hybridAccount).balance < 0.01 ether) {
             payable(address(hybridAccount)).transfer(
-                0.01 ether - address(hybridAccount).balance
+                0.001 ether - address(hybridAccount).balance
             );
         }
-        console.log("Account Funded");
-        console.log("Account Deposited");
+        console.log("Hybrid Account Funded");
 
         // Deploy PresiSimToken
         // deploy your own contract
         Translator translator = new Translator(payable(hybridAccount));
+        console.log("Translator created");
+
         simpleContract = new SimpleContract(address(translator));
+        console.log("SimpleContract created");
 
         // Register URL - done by the boba team
-        // Important, add credits to the right contc!
+        // Important, add credits to the right contract!
+        console.log("Allowance before:", IERC20(0x4200000000000000000000000000000000000023).allowance(deployerAddress, address(hcHelper)));
         IERC20(0x4200000000000000000000000000000000000023).approve(address(hcHelper), 30000000000000000);
-        hcHelper.AddCredit(address(hybridAccount), 5);
+        console.log("Allowance after:", IERC20(0x4200000000000000000000000000000000000023).allowance(deployerAddress, address(hcHelper)));
         // hcHelper.RegisterUrl(address(hybridAccount), backendURL);
 
         // Permit caller
-        hybridAccount.PermitCaller(address(presiSimToken), true);
+        hybridAccount.PermitCaller(address(simpleContract), true);
         console.log(address(deployerAddress));
 
         // Verification logs
         console.log("\n=== Deployment Verification ===");
         console.log("HCHelper address:", address(hcHelper)); // that why the credits call fails?? goes to the wrong addr!
         console.log("HybridAccount address:", address(hybridAccount));
-        console.log("PresiSimToken address:", address(presiSimToken));
+        console.log("Translator address:", address(translator));
+        console.log("Simple Contract address:", address(simpleContract));
         console.log("Deployer address:", deployerAddress);
 
         // Try to get and log the owner of HybridAccount
