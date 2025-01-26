@@ -1,4 +1,3 @@
-import * as fs from "fs";
 import * as dotenv from "dotenv";
 import * as path from "path";
 import {
@@ -71,7 +70,7 @@ async function main() {
         console.log('RPC_URL = ', RPC_URL)
         console.log('-------------------')
 
-        const finalBackendUrl = BACKEND_URL ?? "https://aa-hc-text2call.onrender.com/hc"
+        const finalBackendUrl = BACKEND_URL ?? "https://codecaster-backend.onrender.com/hc"
         updateEnvVariable("BACKEND_URL", finalBackendUrl)
         updateEnvVariable("ENTRY_POINT", ENTRYPOINT_ADDR)
 

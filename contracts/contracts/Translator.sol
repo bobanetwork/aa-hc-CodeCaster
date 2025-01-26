@@ -104,4 +104,8 @@ contract Translator {
            revert(string(ret));
        }
     }
+
+    function getHybridAccountAddress() public view returns (address) {
+        return hybridAccountAddress;
+    }
 }

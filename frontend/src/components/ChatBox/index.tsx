@@ -36,14 +36,14 @@ export const ChatBox = () => {
 
   const abiCoder = new AbiCoder();
 
-  const { selectedAcount, chain } = state;
+  const { selectedAccount, chain } = state;
   const validPrompt = inputMessage && inputMessage.length !== 0;
 
-  const sucessMessage = [
+  const successMessage = [
     <>
       Transaction Completed,
       <a
-        href={`https://testnet.bobascan.com/address/${state?.selectedAcount?.address}/internalTx`}
+        href={`https://testnet.bobascan.com/address/${state?.selectedAccount?.address}/internalTx`}
         target="_blank"
       >
         View on BobaScan
@@ -52,8 +52,9 @@ export const ChatBox = () => {
   ];
 
   const handleSubmit = async (ethValue: string | undefined) => {
+    console.log(`CALLING handleSubmit with ${ethValue}`)
     try {
-      if (!state.selectedAcount || !validPrompt) {
+      if (!state.selectedAccount || !validPrompt) {
         console.log('Not connected')
         return;
       }
@@ -62,8 +63,6 @@ export const ChatBox = () => {
       const encodedParams = abiCoder.encode(["string"], [inputMessage]);
       const txData = hexlify(concat([funcSelector, encodedParams]));
 
-      console.log('using contract: ', ADD_SUB_CONTRACT)
-
       const transactionDetails = {
         payload: {
           to: ADD_SUB_CONTRACT,
@@ -71,9 +70,11 @@ export const ChatBox = () => {
           data: txData,
           initCode: "",
         },
-        account: state.selectedAcount.id,
+        account: state.selectedAccount.id,
         scope: `eip155:${chain}`,
       };
+
+      console.log('tx Details: ', transactionDetails)
 
       const txResponse = await window.ethereum?.request({
         method: "wallet_invokeSnap",
@@ -82,15 +83,18 @@ export const ChatBox = () => {
           request: {
             method: "eth_sendUserOpBoba",
             params: [transactionDetails],
-            id: state.selectedAcount.id,
+            id: state.selectedAccount.id,
           },
         },
       });
 
+
       const response = JSON.stringify(txResponse);
 
+      console.log('response is: ', response)
+
       if (response.includes("result")) {
-        setMessages((prevMessages) => [...prevMessages, sucessMessage]);
+        setMessages((prevMessages) => [...prevMessages, successMessage]);
       }
     } catch (error: any) {
       setMessages((prevMessages) => [
@@ -104,7 +108,7 @@ export const ChatBox = () => {
     if (!state) return;
     try {
       console.log('no acc: ');
-      if (!selectedAcount) {
+      if (!selectedAccount) {
         return;
       }
 
@@ -119,7 +123,6 @@ export const ChatBox = () => {
       );
 
       const txData = hexlify(concat([funcSelector, encodedParams]));
-      //read contract to check allowance method to check if address is already approved. {owner: address, spender:ADD_SUB_CONTRACT} 0x4200000000000000000000000000000000000023
 
       const transactionDetails = {
         payload: {
@@ -127,7 +130,7 @@ export const ChatBox = () => {
           value: "0",
           data: txData,
         },
-        account: selectedAcount.id,
+        account: selectedAccount.id,
         scope: `eip155:${state.chain}`,
       };
 
@@ -138,7 +141,7 @@ export const ChatBox = () => {
           request: {
             method: "eth_sendUserOpBoba",
             params: [transactionDetails],
-            id: selectedAcount?.id,
+            id: selectedAccount?.id,
           },
         },
       });
@@ -180,8 +183,8 @@ export const ChatBox = () => {
       const needConvertRates = currencies.includes("usd");
       const needExplicitValue = currencies.includes("eth");
 
-      console.log("need approve traslator", needBobaApprove);
-      console.log("need needConvertRates ", needConvertRates);
+      console.log("need approve Translator?", needBobaApprove);
+      console.log("need needConvertRates?", needConvertRates);
       console.log("needExplicitValue", needExplicitValue);
 
       if (needBobaApprove) {
@@ -195,6 +198,8 @@ export const ChatBox = () => {
         handleSubmit(undefined);
       }
     };
+
+    console.log('---> Reached the end')
 
     filterData(inputMessage.toLowerCase());
   };

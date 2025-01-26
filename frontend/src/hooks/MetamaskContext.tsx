@@ -13,7 +13,7 @@ export type MetamaskState = {
   installedSnap?: Snap;
   error?: Error;
   accounts?: KeyringAccount[];
-  selectedAcount?: KeyringAccount;
+  selectedAccount?: KeyringAccount;
   chain?: string;
 };
 
@@ -63,7 +63,7 @@ const reducer: Reducer<MetamaskState, MetamaskDispatch> = (state, action) => {
       return {
         ...state,
         accounts: action.payload.accounts,
-        selectedAcount: action.payload.selectedAccount,
+        selectedAccount: action.payload.selectedAccount,
         chain: action.payload.chain,
       };
 

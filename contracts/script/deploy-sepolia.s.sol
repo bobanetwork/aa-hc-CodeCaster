@@ -65,7 +65,7 @@ contract DeployExample is Script {
         // hcHelper.RegisterUrl(address(hybridAccount), backendURL);
 
         // Permit caller
-        hybridAccount.PermitCaller(address(simpleContract), true);
+        hybridAccount.PermitCaller(address(translator), true);
         console.log(address(deployerAddress));
 
         // Verification logs
@@ -73,7 +73,6 @@ contract DeployExample is Script {
         console.log("HCHelper address:", address(hcHelper)); // that why the credits call fails?? goes to the wrong addr!
         console.log("HybridAccount address:", address(hybridAccount));
         console.log("Translator address:", address(translator));
-        console.log("Simple Contract address:", address(simpleContract));
         console.log("Deployer address:", deployerAddress);
 
         // Try to get and log the owner of HybridAccount

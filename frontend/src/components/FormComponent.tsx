@@ -24,13 +24,13 @@ const FormComponent = () => {
     setinputB(0);
   };
 
-  const { selectedAcount, chain } = state;
+  const { selectedAccount, chain } = state;
   const allowedChain = Number(chain) !== 28882;
   const validPrompt = prompt && prompt.length !== 0;
 
   const onApprove = async () => {
     try {
-      if (!selectedAcount || allowedChain || validPrompt) {
+      if (!selectedAccount || allowedChain || validPrompt) {
         return;
       }
 
@@ -54,7 +54,7 @@ const FormComponent = () => {
           data: txData,
           initCode: "",
         },
-        account: selectedAcount.id,
+        account: selectedAccount.id,
         scope: `eip155:${state.chain}`,
       };
 
@@ -67,7 +67,7 @@ const FormComponent = () => {
           request: {
             method: "eth_sendUserOpBoba", // operation to send the data to bundler
             params: [transactionDetails],
-            id: selectedAcount?.id,
+            id: selectedAccount?.id,
           },
         },
       });
@@ -81,8 +81,8 @@ const FormComponent = () => {
 
   const onSubmit = async () => {
     try {
-      if (!selectedAcount || allowedChain || validPrompt) {
-        console.log(selectedAcount, allowedChain, validPrompt);
+      if (!selectedAccount || allowedChain || validPrompt) {
+        console.log(selectedAccount, allowedChain, validPrompt);
         return;
       }
 
@@ -95,7 +95,7 @@ const FormComponent = () => {
           data: txData,
           initCode: "",
         },
-        account: selectedAcount.id,
+        account: selectedAccount.id,
         scope: `eip155:${chain}`,
       };
 
@@ -106,7 +106,7 @@ const FormComponent = () => {
           request: {
             method: "eth_sendUserOpBoba", // operation to send the data to bundler
             params: [transactionDetails],
-            id: selectedAcount?.id,
+            id: selectedAccount?.id,
           },
         },
       });

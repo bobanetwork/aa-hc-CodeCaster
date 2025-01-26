@@ -11,15 +11,15 @@ const ResultComponent = () => {
   const [result, setResult] = useState();
 
   useEffect(() => {
-    if (state.selectedAcount) {
-      setaddress(state.selectedAcount?.address as string)
+    if (state.selectedAccount) {
+      setaddress(state.selectedAccount?.address as string)
     }
-  }, [state.selectedAcount])
+  }, [state.selectedAccount])
 
   const onReadCounter = async () => {
 
     try {
-      if (!address && !state.selectedAcount) {
+      if (!address && !state.selectedAccount) {
         return false
       }
 
