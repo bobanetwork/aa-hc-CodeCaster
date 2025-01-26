@@ -72,7 +72,6 @@ def offchain_text2multi(ver, sk, src_addr, src_nonce, oo_nonce, payload, *args):
         ver, sk, src_addr, src_nonce, oo_nonce, payload, args))
     err_code = 0
     resp = Web3.to_bytes(text="unknown error")
-    assert(ver == "0.2")
     req = None
 
     try:
