@@ -12,6 +12,8 @@ load_dotenv()
 API_KEY = os.environ.get('OPENAI_APIKEY')
 assert (len(API_KEY) > 1)
 
+client = openai.OpenAI(api_key=API_KEY)
+
 # Initialize OpenAI
 openai.api_key = API_KEY
 
@@ -42,7 +44,7 @@ def ai_call(textInput):
     messages=[
         {"role": "system", "content": "You are an assitant that returns a tuple with the following information based on the input = [type = transfer/swap, sender, recipient, amount, token symbol(crypto), isFiat = yes/no, fiat currency, swapTo token if swap]"},
         {"role": "system", "content": "assume if sender is not specified it is 0x123"},
-        {"role": "system", "content": "if its a swap request, recipient must be the exchange mentioned"},
+        {"role": "system", "content": "if its a swap request, srecipient must be the exchange mentioned"},
         {"role": "system", "content": "In case the input looks like a weather/time info request, only return a tuple with: [weather (or) time, location, weather/time attribute]"},
         {"role": "system", "content": "return strings (single quotes) for each item of the tuple and only return a tuple for your answer"},
         {"role": "user", "content": textInput}
