@@ -8,11 +8,6 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def server_loop():
-    print("Booting")
-    print("Using EP", os.environ.get('ENTRY_POINTS'))
-    print("Using HH", os.environ.get('HC_HELPER_ADDR'))
-    print("Using OO", os.environ.get('OC_OWNER'))
-
     # new sdk instance
     sdk = HybridComputeSDK()
     # prepare the server
