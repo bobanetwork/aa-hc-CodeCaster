@@ -23,16 +23,17 @@ def run():
 
     op = aa.build_op(USER_ACCOUNT, CONTRACT, 0, calldata, nKey)
 
-    op['preVerificationGas'] = Web3.to_hex(25238)
-    op['verificationGasLimit'] = Web3.to_hex(105238)
-    op['callGasLimit'] = Web3.to_hex(10000)
-    op['initCode'] = '0x'
-    # Estimate gas
-#     (success, op) = estimateOp(aa, op)
-#     if not success:
-#         print("𐄂 Gas estimation failed")
-#         return
-    # Now sign and submit
+    # add these to manually send user operations without estimation
+#     op['preVerificationGas'] = Web3.to_hex(35238)
+#     op['verificationGasLimit'] = Web3.to_hex(115238)
+#     op['callGasLimit'] = Web3.to_hex(20000)
+#     op['initCode'] = '0x'
+#     Estimate gas
+    (success, op) = estimateOp(aa, op)
+    if not success:
+        print("𐄂 Gas estimation failed")
+        return
+#     Now sign and submit
     rcpt = aa.sign_submit_op(op, u_key)
     print("Receipt:", rcpt)
 

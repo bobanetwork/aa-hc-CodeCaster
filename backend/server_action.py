@@ -149,7 +149,7 @@ def offchain_text2multi(ver, sk, src_addr, src_nonce, oo_nonce, payload, *args):
         if err_code == 0:
             enc_tuples = []
             for i in range(len(return_tuples)):
-                print (return_tuples[i])
+                print ("Having", return_tuples[i])
                 enc_tuples.append (ethabi.encode(['address', 'uint256', 'bytes'], return_tuples[i]))
             resp = ethabi.encode(['bytes[]'], [enc_tuples])
     except Exception as e:
