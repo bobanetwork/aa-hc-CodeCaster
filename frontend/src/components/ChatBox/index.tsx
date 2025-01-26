@@ -60,7 +60,7 @@ export const ChatBox = () => {
       }
 
       console.log(`Preparing Message: ${inputMessage}`)
-      const funcSelector = FunctionFragment.getSelector("do_it(string)", ["string"]);
+      const funcSelector = FunctionFragment.getSelector("do_it", ["string"]);
       const encodedParams = abiCoder.encode(["string"], [inputMessage]);
       const txData = hexlify(concat([funcSelector, encodedParams]));
 
