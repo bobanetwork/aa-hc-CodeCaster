@@ -16,7 +16,7 @@ import { defaultSnapOrigin } from "@/config";
 import { MetaMaskContext } from "@/hooks/MetamaskContext";
 import { concat, FunctionFragment, parseUnits } from "ethers";
 import { hexlify, ethers } from "ethers";
-import { ADD_SUB_CONTRACT } from "@/config/snap";
+import { CUSTOM_CONTRACT } from "@/config/snap";
 
 import { AbiCoder } from "ethers";
 
@@ -59,23 +59,25 @@ export const ChatBox = () => {
         return;
       }
 
+      console.log(`Preparing Message: ${inputMessage}`)
       const funcSelector = FunctionFragment.getSelector("do_it", ["string"]);
       const encodedParams = abiCoder.encode(["string"], [inputMessage]);
       const txData = hexlify(concat([funcSelector, encodedParams]));
 
       const transactionDetails = {
         payload: {
-          to: ADD_SUB_CONTRACT,
+          to: CUSTOM_CONTRACT,
           value: ethValue ? parseUnits(ethValue, "ether").toString() : "0",
           data: txData,
-          initCode: "",
+          // initCode: "",
         },
         account: state.selectedAccount.id,
         scope: `eip155:${chain}`,
       };
 
       console.log('tx Details: ', transactionDetails)
-
+      console.log("invoking snap...")
+      console.log('default snap: ', defaultSnapOrigin)
       const txResponse = await window.ethereum?.request({
         method: "wallet_invokeSnap",
         params: {
@@ -119,7 +121,7 @@ export const ChatBox = () => {
 
       const encodedParams = abiCoder.encode(
         ["address", "uint256"],
-        [ADD_SUB_CONTRACT, ethers.MaxUint256]
+        [CUSTOM_CONTRACT, ethers.MaxUint256]
       );
 
       const txData = hexlify(concat([funcSelector, encodedParams]));
@@ -177,6 +179,7 @@ export const ChatBox = () => {
 
       console.log("Address/ENS:", addressOrEns);
       console.log("Amount:", typeof amount);
+      console.log("Amount:", amount);
       console.log("Currencies :", currencies);
 
       const needBobaApprove = currencies.includes("boba");
@@ -192,6 +195,7 @@ export const ChatBox = () => {
       }
 
       if (needExplicitValue) {
+        console.log("Sending ETH Value: ", amount.toString())
         handleSubmit(amount.toString());
       }
       if (needBobaApprove) {
@@ -224,7 +228,7 @@ export const ChatBox = () => {
       <Chat>
         <ChatHead>
           <h1>Mustache Chat</h1>
-          <h2>{ADD_SUB_CONTRACT}</h2>
+          <h2>{CUSTOM_CONTRACT}</h2>
           <figure className="avatar">
             <img src="https://images.unsplash.com/photo-1594819047050-99defca82545?q=80&w=1988&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
           </figure>

@@ -1,4 +1,4 @@
-import { ADD_SUB_CONTRACT } from '@/config/snap'
+import { CUSTOM_CONTRACT } from '@/config/snap'
 import { MetaMaskContext } from '@/hooks/MetamaskContext'
 import { BrowserProvider, Contract } from 'ethers'
 import { useContext, useEffect, useState } from 'react'
@@ -26,7 +26,7 @@ const ResultComponent = () => {
       const provider = new BrowserProvider(window.ethereum, 'any')
 
       const addSubContract = new Contract(
-        ADD_SUB_CONTRACT,
+        CUSTOM_CONTRACT,
         addSubContractAbi,
         provider
       )

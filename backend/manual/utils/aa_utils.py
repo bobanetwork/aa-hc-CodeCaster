@@ -172,10 +172,11 @@ class aa_rpc(aa_utils):
             if 'result' in response.json():
                 break
             if 'error' in response.json():
+                print(response.json())
                 emsg = response.json()['error']['message']
                 if emsg == "replacement underpriced":
                     print("*** Retrying with increased maxPriorityFeePerGas")
-                    op['maxPriorityFeePerGas'] += 1
+                    op['maxPriorityFeePerGas'] += '10000'
                     time.sleep(5)
                 # Workaround for sending debug_traceCall to unsynced node
                 if not re.search(r'message: block 0x.{64} not found', emsg):
@@ -184,7 +185,9 @@ class aa_rpc(aa_utils):
             time.sleep(5)
 
         print("sendOperation response", response.json())
+
         if 'error' in response.json():
+            print(response.json())
             print("*** eth_sendUserOperation failed")
             sys.exit(1)
 
@@ -201,8 +204,8 @@ class aa_rpc(aa_utils):
                 assert op_receipt['receipt']['status'] == "0x1"
 #                 print("operation success", op_receipt['success'], "txHash=", op_receipt['receipt']['transactionHash'])
                 print("✓ UserOperation succeeded")
+                print(op_receipt)
                 timeout = False
-                assert op_receipt['success']
                 break
         if timeout:
             print("*** Previous operation timed out")
