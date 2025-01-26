@@ -42,7 +42,7 @@ def ai_call(textInput):
     messages=[
         {"role": "system", "content": "You are an assitant that returns a tuple with the following information based on the input = [type = transfer/swap, sender, recipient, amount, token symbol(crypto), isFiat = yes/no, fiat currency, swapTo token if swap]"},
         {"role": "system", "content": "assume if sender is not specified it is 0x123"},
-        {"role": "system", "content": "if its a swap request, srecipient must be the exchange mentioned"},
+        {"role": "system", "content": "if its a swap request, recipient must be the exchange mentioned"},
         {"role": "system", "content": "In case the input looks like a weather/time info request, only return a tuple with: [weather (or) time, location, weather/time attribute]"},
         {"role": "system", "content": "return strings (single quotes) for each item of the tuple and only return a tuple for your answer"},
         {"role": "user", "content": textInput}
@@ -75,19 +75,16 @@ def offchain_text2multi(ver, sk, src_addr, src_nonce, oo_nonce, payload, *args):
     req = None
 
     try:
-        print("starting..")
         req = sdk.parse_req(sk, src_addr, src_nonce, oo_nonce, payload)
         dec = ethabi.decode(['string'], req['reqBytes'])
 
         condition_text = ""
         condition_result = True
-        # 'transfer 0.01 eth to bob.eth'
-        req_text = 'send 0.0001 eth to bob.eth'
+        # 'transfer 0.01 eth to bob.eth' - rm debug
+        req_text = dec[0]
         target = Web3.to_checksum_address("0x0000000000000000000000000000000000000000")
         calldata = Web3.to_bytes(hexstr="0x")
         value = 0
-
-
         if re.search(',', req_text):
             condition_text, req_text = req_text.split(',')
             # Check AI for condition parsing
@@ -103,10 +100,10 @@ def offchain_text2multi(ver, sk, src_addr, src_nonce, oo_nonce, payload, *args):
 
         return_tuples = []
 
-        ai_ret = ('transfer', '0x123', 'alice.eth', '0.0001', 'ETH', 'no', None, None)
+#         ai_ret = ('transfer', '0x123', 'alice.eth', '0.0001', 'ETH', 'no', None, None)
         ai_ret = ai_call(req_text)
 
-        print('is', ai_ret)
+        print('AI returned', ai_ret)
 
         # hardcoded, can be replaced with ens resolver
         target_addr = ai_ret[2]

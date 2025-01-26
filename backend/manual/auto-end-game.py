@@ -12,7 +12,7 @@ def run():
     aa = aa_rpc(ENTRY_POINT, w3, bundler_rpc)
 
     # Let's print the exact calldata we're generating
-    message = "send 0.00000001 eth to alice.eth"
+    message = "send 0.00000001 eth to 0x000000000000000000000000000000000000dead"
     func_call = selector("do_it(string)")
     params = encode(['string'], [message])
     print("Function selector:", func_call.hex())
@@ -23,11 +23,15 @@ def run():
 
     op = aa.build_op(USER_ACCOUNT, CONTRACT, 0, calldata, nKey)
 
+    op['preVerificationGas'] = Web3.to_hex(25238)
+    op['verificationGasLimit'] = Web3.to_hex(105238)
+    op['callGasLimit'] = Web3.to_hex(10000)
+    op['initCode'] = '0x'
     # Estimate gas
-    (success, op) = estimateOp(aa, op)
-    if not success:
-        print("𐄂 Gas estimation failed")
-        return
+#     (success, op) = estimateOp(aa, op)
+#     if not success:
+#         print("𐄂 Gas estimation failed")
+#         return
     # Now sign and submit
     rcpt = aa.sign_submit_op(op, u_key)
     print("Receipt:", rcpt)
