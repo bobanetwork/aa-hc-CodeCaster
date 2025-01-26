@@ -84,21 +84,21 @@ async function main() {
     const hybridAccountContract = new ethers.Contract(HYBRID_ACCOUNT, hybridAccountABI, signer);
     const hcHelperContract = new ethers.Contract(HC_HELPER_ADDR, hcHelperABI, signer);
 
-    /** @DEV can be called */
+    /** @DEV cannot be called, reach out to the BOBA Team */
     async function registerUrl(contractAddr, backendURL) {
         const tx = await hcHelperContract.RegisterUrl(contractAddr, backendURL);
         await tx.wait();
         console.log('URL registered successfully.');
     }
 
-    /** @DEV No restrictions */
+    /** @DEV add credits to the hybrid account */
     async function addCredit(contractAddr, numCredits) {
         const tx = await hcHelperContract.AddCredit(contractAddr, numCredits);
         await tx.wait();
         console.log('Credits added successfully.');
     }
 
-    /** @DEV No restrictions */
+    /** @DEV permit to call the account */
     async function permitCaller(caller) {
         let tx = await hybridAccountContract.PermitCaller(caller, true);
         await tx.wait();
@@ -123,14 +123,6 @@ async function main() {
         }
     } else {
         console.log('NOT REGISTERING URL, since you are not deploying locally. Reach out to Boba Foundation to get your backend url registered on your HybridAccount.')
-    }
-
-    try {
-        console.log('Adding Credits...')
-        // await addCredit(HYBRID_ACCOUNT, 100);
-        console.log('DONE')
-    } catch (e) {
-        console.log('[Ignore on testnet] failed addCredit: ', e);
     }
 }
 

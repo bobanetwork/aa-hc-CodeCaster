@@ -52,14 +52,12 @@ export const ChatBox = () => {
   ];
 
   const handleSubmit = async (ethValue: string | undefined) => {
-    console.log(`CALLING handleSubmit with ${ethValue}`)
     try {
       if (!state.selectedAccount || !validPrompt) {
-        console.log('Not connected')
+        console.log('No account connected')
         return;
       }
 
-      console.log(`Preparing Message: ${inputMessage}`)
       const funcSelector = FunctionFragment.getSelector("do_it", ["string"]);
       const encodedParams = abiCoder.encode(["string"], [inputMessage]);
       const txData = hexlify(concat([funcSelector, encodedParams]));
@@ -75,9 +73,6 @@ export const ChatBox = () => {
         scope: `eip155:${chain}`,
       };
 
-      console.log('tx Details: ', transactionDetails)
-      console.log("invoking snap...")
-      console.log('default snap: ', defaultSnapOrigin)
       const txResponse = await window.ethereum?.request({
         method: "wallet_invokeSnap",
         params: {
@@ -92,8 +87,6 @@ export const ChatBox = () => {
 
 
       const response = JSON.stringify(txResponse);
-
-      console.log('response is: ', response)
 
       if (response.includes("result")) {
         setMessages((prevMessages) => [...prevMessages, successMessage]);
@@ -183,12 +176,7 @@ export const ChatBox = () => {
       console.log("Currencies :", currencies);
 
       const needBobaApprove = currencies.includes("boba");
-      const needConvertRates = currencies.includes("usd");
       const needExplicitValue = currencies.includes("eth");
-
-      console.log("need approve Translator?", needBobaApprove);
-      console.log("need needConvertRates?", needConvertRates);
-      console.log("needExplicitValue", needExplicitValue);
 
       if (needBobaApprove) {
         askForApprove();
@@ -203,8 +191,6 @@ export const ChatBox = () => {
       }
     };
 
-    console.log('---> Reached the end')
-
     filterData(inputMessage.toLowerCase());
   };
 
@@ -214,7 +200,6 @@ export const ChatBox = () => {
     setMessages((prevMessages) => [...prevMessages, inputMessage]);
     setInputMessage("");
     scrollToBottom();
-    console.log('done')
   };
 
   const scrollToBottom = () => {

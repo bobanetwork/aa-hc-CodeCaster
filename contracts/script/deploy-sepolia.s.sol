@@ -35,8 +35,6 @@ contract DeployExample is Script {
 
         // Init HCHelper
         hcHelper = IHCHelper(vm.envAddress("HC_HELPER_ADDR"));
-
-        // Deploy using HybridAccountFactory, salt = block.number to force redeploy HybridAccount if already existing from this wallet
         hybridAccount = HybridAccountFactory(haFactory).createAccount(deployerAddress, block.number);
         console.log("Hybrid Account created");
         console.log(address(hybridAccount));
@@ -49,40 +47,30 @@ contract DeployExample is Script {
         }
         console.log("Hybrid Account Funded");
 
-        // Deploy PresiSimToken
-        // deploy your own contract
         Translator translator = new Translator(payable(hybridAccount));
-        console.log("Translator created");
-
         simpleContract = new SimpleContract(address(translator));
-        console.log("SimpleContract created");
+        console.log("SimpleContract/Translator created");
 
-        // Register URL - done by the boba team
-        // Important, add credits to the right contract!
         console.log("Allowance before:", IERC20(0x4200000000000000000000000000000000000023).allowance(deployerAddress, address(hcHelper)));
         IERC20(0x4200000000000000000000000000000000000023).approve(address(hcHelper), 30000000000000000);
         console.log("Allowance after:", IERC20(0x4200000000000000000000000000000000000023).allowance(deployerAddress, address(hcHelper)));
-        // hcHelper.RegisterUrl(address(hybridAccount), backendURL);
 
         // Permit caller
         hybridAccount.PermitCaller(address(translator), true);
         console.log(address(deployerAddress));
 
-        // Verification logs
         console.log("\n=== Deployment Verification ===");
-        console.log("HCHelper address:", address(hcHelper)); // that why the credits call fails?? goes to the wrong addr!
+        console.log("HCHelper address:", address(hcHelper));
         console.log("HybridAccount address:", address(hybridAccount));
         console.log("Translator address:", address(translator));
         console.log("Deployer address:", deployerAddress);
 
-        // Try to get and log the owner of HybridAccount
         try hybridAccount.owner() returns (address owner) {
             console.log("HybridAccount owner:", owner);
         } catch {
             console.log("Could not fetch HybridAccount owner");
         }
 
-        // Check account balance
         console.log("HybridAccount balance:", address(hybridAccount).balance);
 
         vm.stopBroadcast();
