@@ -73,6 +73,8 @@ export const ChatBox = () => {
         scope: `eip155:${chain}`,
       };
 
+      console.log('tx details: ', transactionDetails)
+
       const txResponse = await window.ethereum?.request({
         method: "wallet_invokeSnap",
         params: {
@@ -85,6 +87,7 @@ export const ChatBox = () => {
         },
       });
 
+      console.log('Response: ', JSON.stringify(txResponse));
 
       const response = JSON.stringify(txResponse);
 
@@ -92,6 +95,7 @@ export const ChatBox = () => {
         setMessages((prevMessages) => [...prevMessages, successMessage]);
       }
     } catch (error: any) {
+      console.error("received error: ", JSON.stringify(error))
       setMessages((prevMessages) => [
         ...prevMessages,
         JSON.stringify(error.message),
