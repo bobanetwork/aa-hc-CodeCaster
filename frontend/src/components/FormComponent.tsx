@@ -6,14 +6,14 @@ import { concat, FunctionFragment, parseUnits } from "ethers";
 import { AbiCoder } from "ethers";
 import { hexlify, ethers } from "ethers";
 import { CopyIcon } from "./CopyIcon";
-import { ADD_SUB_CONTRACT } from "@/config/snap";
+import { CUSTOM_CONTRACT } from "@/config/snap";
 import { Buffer } from "buffer";
 
 const FormComponent = () => {
   const [state] = useContext(MetaMaskContext);
   const [inputA, setinputA] = useState<any>("");
   const [inputB, setinputB] = useState<any>(0);
-  const [testContract, setTestContract] = useState(ADD_SUB_CONTRACT);
+  const [testContract, setTestContract] = useState(CUSTOM_CONTRACT);
   const [response, setResponse] = useState<any>(null);
   const [error, setError] = useState<any>(null);
 
@@ -24,13 +24,13 @@ const FormComponent = () => {
     setinputB(0);
   };
 
-  const { selectedAcount, chain } = state;
+  const { selectedAccount, chain } = state;
   const allowedChain = Number(chain) !== 28882;
   const validPrompt = prompt && prompt.length !== 0;
 
   const onApprove = async () => {
     try {
-      if (!selectedAcount || allowedChain || validPrompt) {
+      if (!selectedAccount || allowedChain || validPrompt) {
         return;
       }
 
@@ -54,7 +54,7 @@ const FormComponent = () => {
           data: txData,
           initCode: "",
         },
-        account: selectedAcount.id,
+        account: selectedAccount.id,
         scope: `eip155:${state.chain}`,
       };
 
@@ -67,7 +67,7 @@ const FormComponent = () => {
           request: {
             method: "eth_sendUserOpBoba", // operation to send the data to bundler
             params: [transactionDetails],
-            id: selectedAcount?.id,
+            id: selectedAccount?.id,
           },
         },
       });
@@ -81,8 +81,8 @@ const FormComponent = () => {
 
   const onSubmit = async () => {
     try {
-      if (!selectedAcount || allowedChain || validPrompt) {
-        console.log(selectedAcount, allowedChain, validPrompt);
+      if (!selectedAccount || allowedChain || validPrompt) {
+        console.log(selectedAccount, allowedChain, validPrompt);
         return;
       }
 
@@ -95,7 +95,7 @@ const FormComponent = () => {
           data: txData,
           initCode: "",
         },
-        account: selectedAcount.id,
+        account: selectedAccount.id,
         scope: `eip155:${chain}`,
       };
 
@@ -106,7 +106,7 @@ const FormComponent = () => {
           request: {
             method: "eth_sendUserOpBoba", // operation to send the data to bundler
             params: [transactionDetails],
-            id: selectedAcount?.id,
+            id: selectedAccount?.id,
           },
         },
       });
@@ -128,7 +128,7 @@ const FormComponent = () => {
           <div className="relative mt-2 rounded-md shadow-sm w-full">
             <input
               type="text"
-              defaultValue={ADD_SUB_CONTRACT}
+              defaultValue={CUSTOM_CONTRACT}
               value={testContract}
               onChange={(e) => setTestContract(e.target.value)}
               name="input A"

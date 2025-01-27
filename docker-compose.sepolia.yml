@@ -10,7 +10,7 @@ services:
         - NETWORK=boba-sepolia # boba-sepolia | local
     image: bobanetwork/aa-hc-example-frontend
     ports:
-      - "8000:80"
+      - "8050:80"
     restart: unless-stopped
 
 networks:

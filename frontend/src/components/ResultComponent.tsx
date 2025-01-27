@@ -1,4 +1,4 @@
-import { ADD_SUB_CONTRACT } from '@/config/snap'
+import { CUSTOM_CONTRACT } from '@/config/snap'
 import { MetaMaskContext } from '@/hooks/MetamaskContext'
 import { BrowserProvider, Contract } from 'ethers'
 import { useContext, useEffect, useState } from 'react'
@@ -11,22 +11,22 @@ const ResultComponent = () => {
   const [result, setResult] = useState();
 
   useEffect(() => {
-    if (state.selectedAcount) {
-      setaddress(state.selectedAcount?.address as string)
+    if (state.selectedAccount) {
+      setaddress(state.selectedAccount?.address as string)
     }
-  }, [state.selectedAcount])
+  }, [state.selectedAccount])
 
   const onReadCounter = async () => {
 
     try {
-      if (!address && !state.selectedAcount) {
+      if (!address && !state.selectedAccount) {
         return false
       }
 
       const provider = new BrowserProvider(window.ethereum, 'any')
 
       const addSubContract = new Contract(
-        ADD_SUB_CONTRACT,
+        CUSTOM_CONTRACT,
         addSubContractAbi,
         provider
       )

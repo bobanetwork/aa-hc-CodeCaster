@@ -16,7 +16,7 @@ import { defaultSnapOrigin } from "@/config";
 import { MetaMaskContext } from "@/hooks/MetamaskContext";
 import { concat, FunctionFragment, parseUnits } from "ethers";
 import { hexlify, ethers } from "ethers";
-import { ADD_SUB_CONTRACT } from "@/config/snap";
+import { CUSTOM_CONTRACT } from "@/config/snap";
 
 import { AbiCoder } from "ethers";
 
@@ -36,14 +36,14 @@ export const ChatBox = () => {
 
   const abiCoder = new AbiCoder();
 
-  const { selectedAcount, chain } = state;
+  const { selectedAccount, chain } = state;
   const validPrompt = inputMessage && inputMessage.length !== 0;
 
-  const sucessMessage = [
+  const successMessage = [
     <>
       Transaction Completed,
       <a
-        href={`https://testnet.bobascan.com/address/${state?.selectedAcount?.address}/internalTx`}
+        href={`https://testnet.bobascan.com/address/${state?.selectedAccount?.address}/internalTx`}
         target="_blank"
       >
         View on BobaScan
@@ -53,8 +53,8 @@ export const ChatBox = () => {
 
   const handleSubmit = async (ethValue: string | undefined) => {
     try {
-      if (!state.selectedAcount || !validPrompt) {
-        console.log('Not connected')
+      if (!state.selectedAccount || !validPrompt) {
+        console.log('No account connected')
         return;
       }
 
@@ -64,12 +64,12 @@ export const ChatBox = () => {
 
       const transactionDetails = {
         payload: {
-          to: ADD_SUB_CONTRACT,
+          to: CUSTOM_CONTRACT,
           value: ethValue ? parseUnits(ethValue, "ether").toString() : "0",
           data: txData,
-          initCode: "",
+          // initCode: "",
         },
-        account: state.selectedAcount.id,
+        account: state.selectedAccount.id,
         scope: `eip155:${chain}`,
       };
 
@@ -80,15 +80,16 @@ export const ChatBox = () => {
           request: {
             method: "eth_sendUserOpBoba",
             params: [transactionDetails],
-            id: state.selectedAcount.id,
+            id: state.selectedAccount.id,
           },
         },
       });
 
+
       const response = JSON.stringify(txResponse);
 
       if (response.includes("result")) {
-        setMessages((prevMessages) => [...prevMessages, sucessMessage]);
+        setMessages((prevMessages) => [...prevMessages, successMessage]);
       }
     } catch (error: any) {
       setMessages((prevMessages) => [
@@ -102,7 +103,7 @@ export const ChatBox = () => {
     if (!state) return;
     try {
       console.log('no acc: ');
-      if (!selectedAcount) {
+      if (!selectedAccount) {
         return;
       }
 
@@ -113,11 +114,10 @@ export const ChatBox = () => {
 
       const encodedParams = abiCoder.encode(
         ["address", "uint256"],
-        [ADD_SUB_CONTRACT, ethers.MaxUint256]
+        [CUSTOM_CONTRACT, ethers.MaxUint256]
       );
 
       const txData = hexlify(concat([funcSelector, encodedParams]));
-      //read contract to check allowance method to check if address is already approved. {owner: address, spender:ADD_SUB_CONTRACT} 0x4200000000000000000000000000000000000023
 
       const transactionDetails = {
         payload: {
@@ -125,7 +125,7 @@ export const ChatBox = () => {
           value: "0",
           data: txData,
         },
-        account: selectedAcount.id,
+        account: selectedAccount.id,
         scope: `eip155:${state.chain}`,
       };
 
@@ -136,7 +136,7 @@ export const ChatBox = () => {
           request: {
             method: "eth_sendUserOpBoba",
             params: [transactionDetails],
-            id: selectedAcount?.id,
+            id: selectedAccount?.id,
           },
         },
       });
@@ -172,21 +172,18 @@ export const ChatBox = () => {
 
       console.log("Address/ENS:", addressOrEns);
       console.log("Amount:", typeof amount);
+      console.log("Amount:", amount);
       console.log("Currencies :", currencies);
 
       const needBobaApprove = currencies.includes("boba");
-      const needConvertRates = currencies.includes("usd");
       const needExplicitValue = currencies.includes("eth");
-
-      console.log("need approve traslator", needBobaApprove);
-      console.log("need needConvertRates ", needConvertRates);
-      console.log("needExplicitValue", needExplicitValue);
 
       if (needBobaApprove) {
         askForApprove();
       }
 
       if (needExplicitValue) {
+        console.log("Sending ETH Value: ", amount.toString())
         handleSubmit(amount.toString());
       }
       if (needBobaApprove) {
@@ -203,7 +200,6 @@ export const ChatBox = () => {
     setMessages((prevMessages) => [...prevMessages, inputMessage]);
     setInputMessage("");
     scrollToBottom();
-    console.log('done')
   };
 
   const scrollToBottom = () => {
@@ -217,7 +213,7 @@ export const ChatBox = () => {
       <Chat>
         <ChatHead>
           <h1>Mustache Chat</h1>
-          <h2>{ADD_SUB_CONTRACT}</h2>
+          <h2>{CUSTOM_CONTRACT}</h2>
           <figure className="avatar">
             <img src="https://images.unsplash.com/photo-1594819047050-99defca82545?q=80&w=1988&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
           </figure>
