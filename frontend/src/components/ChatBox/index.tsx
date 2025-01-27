@@ -67,11 +67,10 @@ export const ChatBox = () => {
           to: CUSTOM_CONTRACT,
           value: ethValue ? parseUnits(ethValue, "ether").toString() : "0",
           data: txData,
-          // temp settings
           overrides: {
-            maxFeePerGasReq: "0x47868C00",
-            maxPriorityFeePerGasReq: "0x3938700",
-            callGasLimitReq: "0x100000",
+            maxFeePerGasReq: "47868C00",
+            maxPriorityFeePerGasReq: "3938700",
+            callGasLimitReq: "100000",
             preVerificationGasReqMultiplier: 3,
           }
         },
