@@ -67,10 +67,16 @@ export const ChatBox = () => {
           to: CUSTOM_CONTRACT,
           value: ethValue ? parseUnits(ethValue, "ether").toString() : "0",
           data: txData,
-          // initCode: "",
+          // temp settings
+          overrides: {
+            maxFeePerGasReq: "0x47868C00",
+            maxPriorityFeePerGasReq: "0x3938700",
+            callGasLimitReq: "0x100000",
+            preVerificationGasReqMultiplier: 3,
+          }
         },
         account: state.selectedAccount.id,
-        scope: `eip155:${chain}`,
+        scope: `eip155:${chain}`
       };
 
       console.log('tx details: ', transactionDetails)
