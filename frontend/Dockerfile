@@ -6,11 +6,15 @@ ARG NETWORK
 # Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
+# Install pnpm globally
+RUN npm install -g pnpm
 
-# Install dependencies
-RUN npm i
+# Copy package.json and pnpm-lock.yaml
+COPY package*.json ./
+COPY pnpm-lock.yaml* ./
+
+# Install dependencies using pnpm
+RUN pnpm install --frozen-lockfile
 
 # Copy the rest of the application code
 COPY . .
@@ -19,8 +23,8 @@ COPY . .
 COPY .env-boba-sepolia .env
 # VITE needs env-vars at build time
 
-# Build the application
-RUN npm run build
+# Build the application using pnpm
+RUN pnpm run build
 
 # Stage 2: Serve the application
 FROM nginx:alpine
